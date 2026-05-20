@@ -1,0 +1,96 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Destination {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  imageUrl    String?
+  position    Int       @default(0)
+  packages    Package[]
+}
+
+model Package {
+  id            String         @id @default(cuid())
+  title         String
+  description   String
+  price         Float
+  days          Int
+  nights        Int
+  imageUrl      String? // Primary thumbnail
+  images        PackageImage[]
+  destinationId String
+  destination   Destination    @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  bookings      Booking[]
+  itinerary     String?
+  inclusions    String?
+  exclusions    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model PackageImage {
+  id        String  @id @default(cuid())
+  url       String
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id            String   @id @default(cuid())
+  name          String
+  email         String?
+  phone         String
+  travelDate    DateTime
+  guests        Int
+  children      Int      @default(0)
+  childrenAges  String?
+  nights        Int?
+  packageId     String
+  package       Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  status        String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED
+  createdAt     DateTime @default(now())
+}
+
+model FlightRequest {
+  id              String   @id @default(cuid())
+  from            String
+  to              String
+  departureDate   DateTime
+  returnDate      DateTime?
+  adults          Int      @default(1)
+  children        Int      @default(0)
+  childrenAges    String?
+  baggage         String?
+  preferredAirline String?
+  name            String
+  email           String?
+  phone           String
+  status          String   @default("PENDING") // PENDING, CONTACTED, COMPLETED
+  createdAt       DateTime @default(now())
+}
+
+model VisaRequest {
+  id              String   @id @default(cuid())
+  country         String
+  visaType        String
+  applicants      Int      @default(1)
+  travelDate      DateTime
+  name            String
+  email           String?
+  phone           String
+  message         String?
+  status          String   @default("PENDING") // PENDING, CONTACTED, COMPLETED
+  createdAt       DateTime @default(now())
+}
+
+model SiteSetting {
+  key   String @id
+  value String
+}
