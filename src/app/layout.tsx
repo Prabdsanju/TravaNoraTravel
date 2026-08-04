@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  icons: {
+    icon: '/logo-circle.svg',
+    apple: '/logo-circle.svg',
+  },
 };
 
 import { getSiteSettings } from '@/app/actions/settings';
