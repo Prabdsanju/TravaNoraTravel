@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DestinationDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const destination = await prisma.destination.findUnique({
@@ -33,7 +35,7 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
         <h2 className="text-primary font-bold mb-8 text-center" style={{ fontSize: '2rem' }}>Packages in {destination.name}</h2>
         
         <div className="grid md:grid-cols-3">
-          {destination.packages.length > 0 ? destination.packages.map((pkg: any) => (
+          {destination.packages.length > 0 ? destination.packages.map((pkg) => (
             <div key={pkg.id} className="card">
               <div className="card-image" style={{
                 background: `url(${pkg.imageUrl || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500'}) center/cover`

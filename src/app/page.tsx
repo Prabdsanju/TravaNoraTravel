@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getSiteSettings } from '@/app/actions/settings';
 
+export const dynamic = 'force-dynamic';
+
 import Hero from './Hero';
 import AnimatedFeatures from './AnimatedFeatures';
 import AnimatedServices from './AnimatedServices';
@@ -20,25 +22,41 @@ export default async function Home() {
   });
   const settings = await getSiteSettings();
 
-  const heroData = {
-    thailand: {
-      count: destinations.find(d => d.name === 'Thailand')?._count.packages || 0,
-      id: destinations.find(d => d.name === 'Thailand')?.id || 'thailand'
-    },
-    malaysia: {
-      count: destinations.find(d => d.name === 'Malaysia')?._count.packages || 0,
-      id: destinations.find(d => d.name === 'Malaysia')?.id || 'malaysia'
-    },
-    singapore: {
-      count: destinations.find(d => d.name === 'Singapore')?._count.packages || 0,
-      id: destinations.find(d => d.name === 'Singapore')?.id || 'singapore'
-    },
-  };
+  const heroData: Record<string, { count: number; id: string; name: string; description: string | null; imageUrl: string | null }> = {};
+  destinations.forEach(d => {
+    const key = d.name.toLowerCase().replace(/\s+/g, '');
+    heroData[key] = {
+      count: d._count.packages,
+      id: d.id,
+      name: d.name,
+      description: d.description,
+      imageUrl: d.imageUrl
+    };
+  });
+
+
+  let blogList = [];
+  try {
+    if (settings.blog_list_json) {
+      blogList = JSON.parse(settings.blog_list_json);
+    }
+  } catch (e) {}
+
+  if (blogList.length === 0) {
+    blogList = [
+      { title: 'Top 10 Hidden Gems in Sri Lanka', date: '12 May 2026', description: 'Discover the untouched beauty of Sri Lanka...', image: 'https://images.unsplash.com/photo-1542662565-7e4fd159dddd?w=600', link: '/blog/hidden-gems' },
+      { title: 'A Guide to Asian Street Food', date: '20 Apr 2026', description: 'Explore the vibrant flavors of Asia...', image: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600', link: '/blog/street-food' },
+      { title: 'Packing Essentials for Maldives', date: '05 Mar 2026', description: 'Everything you need for a tropical getaway...', image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600', link: '/blog/maldives-packing' }
+    ];
+  }
 
   return (
     <>
-      <Hero data={heroData} settings={settings} />
+      {settings.show_hero !== 'false' && (
+        <Hero data={heroData} settings={settings} />
+      )}
 
+      {settings.show_destinations !== 'false' && (
       <section className="py-16 container">
         <div className="section-head">
           <span className="title-prefix">{settings.dest_prefix || 'Where to go'}</span>
@@ -72,7 +90,9 @@ export default async function Home() {
           )}
         </AnimatedCards>
       </section>
+      )}
 
+      {settings.show_features !== 'false' && (
       <section className="py-20" style={{ background: 'linear-gradient(to bottom, #f8fafc, #ffffff)' }}>
         <div className="container">
           <div className="section-head">
@@ -82,17 +102,23 @@ export default async function Home() {
           <AnimatedFeatures />
         </div>
       </section>
+      )}
 
+      {settings.show_services !== 'false' && (
       <section style={{ padding: '6rem 0', backgroundColor: 'var(--card-bg)' }}>
         <AnimatedServices settings={settings} />
       </section>
+      )}
 
+      {settings.show_philosophy !== 'false' && (
       <section className="py-24" style={{ background: '#ffffff', position: 'relative', overflow: 'hidden' }}>
         <AnimatedPhilosophy settings={settings} />
         {/* Abstract background shape */}
         <div style={{ position: 'absolute', top: '10%', right: '-5%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.03)', zIndex: -1 }}></div>
       </section>
+      )}
 
+      {settings.show_packages !== 'false' && (
       <section className="py-16 container">
         <div className="section-head">
           <span className="title-prefix">{settings.pkg_prefix || 'Explore Destinations'}</span>
@@ -112,7 +138,7 @@ export default async function Home() {
 
                   <div className="flex space-between align-center mt-4" style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div className="price-box">
-                      <p className="price"><span>{settings.global_currency || 'LKR '}</span>{pkg.price.toLocaleString()}</p>
+                      <p className="price" style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--primary-color)' }}><span>{settings.global_currency || 'LKR '}</span>{pkg.price.toLocaleString()}</p>
                       <span style={{ fontSize: '0.65rem', color: 'var(--text-light)', display: 'block', marginTop: '-2px' }}>*Conditions Apply</span>
                     </div>
                     <Link href={`/packages/${pkg.id}`} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
@@ -129,8 +155,10 @@ export default async function Home() {
           )}
         </AnimatedCards>
       </section>
+      )}
 
-      <section className="py-20" style={{ backgroundColor: '#0f172a', color: 'white', overflow: 'hidden' }}>
+      {settings.show_testimonials !== 'false' && (
+      <section className="py-20" style={{ backgroundColor: 'var(--primary-color)', color: 'white', overflow: 'hidden' }}>
         <div className="container">
           <div className="section-head">
             <span className="title-prefix" style={{ color: 'var(--accent-color)' }}>Happy Travelers</span>
@@ -145,14 +173,14 @@ export default async function Home() {
               <AnimatedCard key={i}>
                 <div style={{ 
                   background: 'rgba(255,255,255,0.05)', 
-                  padding: '2rem', 
-                  borderRadius: '24px', 
+                  padding: '2.5rem', 
+                  borderRadius: '0px', 
                   border: '1px solid rgba(255,255,255,0.1)',
                   backdropFilter: 'blur(10px)',
                   height: '100%'
                 }}>
                   <div style={{ color: '#fbbf24', fontSize: '1.25rem', marginBottom: '1rem' }}>⭐⭐⭐⭐⭐</div>
-                  <p style={{ fontStyle: 'italic', marginBottom: '1.5rem', lineHeight: 1.7, opacity: 0.9 }}>"{review.text}"</p>
+                  <p style={{ fontStyle: 'italic', marginBottom: '1.5rem', lineHeight: 1.7, opacity: 0.9 }}>&ldquo;{review.text}&rdquo;</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div style={{ width: '45px', height: '45px', borderRadius: '50%', background: 'linear-gradient(45deg, var(--primary-color), var(--accent-color))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
                       {review.name.charAt(0)}
@@ -168,11 +196,15 @@ export default async function Home() {
           </AnimatedCards>
         </div>
       </section>
+      )}
 
+      {settings.show_personalize !== 'false' && (
       <section style={{ padding: '5rem 0', background: 'white' }}>
         <AnimatedPersonalize settings={settings} />
       </section>
+      )}
 
+      {settings.show_blog !== 'false' && (
       <section className="py-16" style={{ background: 'var(--bg-color)' }}>
         <div className="container">
             <div className="section-head">
@@ -180,17 +212,17 @@ export default async function Home() {
                 <h3 className="section-title">{settings.blog_title || 'Insight & Stories'}</h3>
             </div>
             <AnimatedCards>
-              {[1,2,3].map(n => (
+              {blogList.map((post: any, n: number) => (
                 <AnimatedCard key={n}>
                   <div className="blog-card">
-                      <div className="card-image" style={{ backgroundImage: `url(${settings[`blog${n}_img`] || 'https://images.unsplash.com/photo-1542662565-7e4fd159dddd?w=600&q=80'})` }}></div>
+                      <div className="card-image" style={{ backgroundImage: `url(${post.image || 'https://images.unsplash.com/photo-1542662565-7e4fd159dddd?w=600&q=80'})` }}></div>
                       <div className="card-content">
-                          <p className="card-meta">{settings[`blog${n}_date`] || '20 Apr 2026'}</p>
-                          <h3 className="post-title">{settings[`blog${n}_title`] || 'Story Title'}</h3>
+                          <p className="card-meta">{post.date || '20 Apr 2026'}</p>
+                          <h3 className="post-title">{post.title || 'Story Title'}</h3>
                           <p className="text-light hide-overflow-text" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
-                            {settings[`blog${n}_desc`] || 'Description goes here...'}
+                            {post.description || 'Description goes here...'}
                           </p>
-                          <Link href="/blog" className="text-accent font-bold" style={{ fontSize: '0.9rem' }}>{settings.blog_read_btn || 'Read More →'}</Link>
+                          <Link href={post.link || '/blog'} className="text-accent font-bold" style={{ fontSize: '0.9rem' }}>{settings.blog_read_btn || 'Read More →'}</Link>
                       </div>
                   </div>
                 </AnimatedCard>
@@ -198,6 +230,7 @@ export default async function Home() {
             </AnimatedCards>
         </div>
       </section>
+      )}
 
     </>
   );

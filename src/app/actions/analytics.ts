@@ -29,10 +29,9 @@ export async function recordVisit(path: string) {
       console.error("Geo-IP lookup failed", e);
     }
 
-    // @ts-ignore
-    if (!prisma.visit) return;
+    if (!(prisma as any).visit) return;
 
-    await prisma.visit.create({
+    await (prisma as any).visit.create({
       data: {
         ip,
         userAgent,
@@ -48,17 +47,16 @@ export async function recordVisit(path: string) {
 }
 
 export async function getAnalytics() {
-  // @ts-ignore - Handle potential stale client during generation
-  if (!prisma.visit) return { totalVisits: 0, uniqueVisitors: 0, countryStats: [], recentVisits: [] };
+  if (!(prisma as any).visit) return { totalVisits: 0, uniqueVisitors: 0, countryStats: [], recentVisits: [] };
   
-  const totalVisits = await prisma.visit.count();
+  const totalVisits = await (prisma as any).visit.count();
   
   // Get unique visitors by IP
   const uniqueResult = await prisma.$queryRaw`SELECT COUNT(DISTINCT ip) as count FROM Visit` as any[];
   const uniqueVisitors = Number(uniqueResult[0]?.count || 0);
 
   // Get country-wise counts
-  const countryStats = await prisma.visit.groupBy({
+  const countryStats = await (prisma as any).visit.groupBy({
     by: ['country'],
     _count: { _all: true },
     orderBy: { _count: { country: 'desc' } },
@@ -66,7 +64,7 @@ export async function getAnalytics() {
   });
 
   // Get recent visits
-  const recentVisits = await prisma.visit.findMany({
+  const recentVisits = await (prisma as any).visit.findMany({
     orderBy: { createdAt: 'desc' },
     take: 5
   });
@@ -74,7 +72,7 @@ export async function getAnalytics() {
   return {
     totalVisits,
     uniqueVisitors,
-    countryStats: countryStats.map(c => ({ name: c.country, count: c._count._all })),
+    countryStats: countryStats.map((c: any) => ({ name: c.country, count: c._count._all })),
     recentVisits
   };
 }

@@ -13,14 +13,17 @@ export default function FloatingWhatsApp({ phoneNumber }: { phoneNumber: string 
 
   // Check for existing cooldown on mount
   useEffect(() => {
-    setHasMounted(true);
-    const lastClick = localStorage.getItem('last_wa_click');
-    if (lastClick) {
-      const timePassed = Date.now() - parseInt(lastClick);
-      if (timePassed < COOLDOWN_TIME) {
-        setCooldown(Math.ceil((COOLDOWN_TIME - timePassed) / 1000));
+    const timer = setTimeout(() => {
+      setHasMounted(true);
+      const lastClick = localStorage.getItem('last_wa_click');
+      if (lastClick) {
+        const timePassed = Date.now() - parseInt(lastClick);
+        if (timePassed < COOLDOWN_TIME) {
+          setCooldown(Math.ceil((COOLDOWN_TIME - timePassed) / 1000));
+        }
       }
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Countdown timer effect

@@ -31,22 +31,15 @@ const COUNTRIES = [
 
 export default function CountrySearch({ name, placeholder, required }: { name: string, placeholder: string, required?: boolean }) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (query.length < 1) {
-      setResults([]);
-      return;
-    }
-
-    const filtered = COUNTRIES.filter(c => 
-      c.toLowerCase().includes(query.toLowerCase())
-    ).slice(0, 10);
-    
-    setResults(filtered);
-  }, [query]);
+  // Derive results directly during render to prevent synchronous state updates in useEffect
+  const results = query.length < 1
+    ? []
+    : COUNTRIES.filter(c => 
+        c.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 10);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

@@ -23,14 +23,17 @@ export default function BookingForm({
 
   // Check for existing cooldown on mount
   useEffect(() => {
-    setHasMounted(true);
-    const lastBooking = localStorage.getItem('last_booking_time');
-    if (lastBooking) {
-      const timePassed = Date.now() - parseInt(lastBooking);
-      if (timePassed < COOLDOWN_TIME) {
-        setCooldown(Math.ceil((COOLDOWN_TIME - timePassed) / 1000));
+    const timer = setTimeout(() => {
+      setHasMounted(true);
+      const lastBooking = localStorage.getItem('last_booking_time');
+      if (lastBooking) {
+        const timePassed = Date.now() - parseInt(lastBooking);
+        if (timePassed < COOLDOWN_TIME) {
+          setCooldown(Math.ceil((COOLDOWN_TIME - timePassed) / 1000));
+        }
       }
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Countdown timer effect

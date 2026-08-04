@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 import { getSiteSettings } from '@/app/actions/settings';
 import FloatingWhatsApp from './FloatingWhatsApp';
 import VisitTracker from './VisitTracker';
+import { HeaderWrapper, FooterWrapper } from './ClientLayoutWrapper';
 
 export default async function RootLayout({
   children,
@@ -39,100 +40,103 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
       <body suppressHydrationWarning>
         <VisitTracker />
-        <header className="site-header">
-          <div className="container header-container">
-            <Link href="/" className="logo travanora-logo">
-              {settings.site_logo_img ? (
-                <img src={settings.site_logo_img} alt="Logo" className="site-logo" />
-              ) : (
-                <span className="p-icon">T</span>
-              )}
-              <span className="site-title">{settings.site_name_main || 'TravaNora'} <span>{settings.site_name_sub || 'Travel'}</span></span>
-            </Link>
-            <nav className="main-nav">
-              <Link href="/">Home</Link>
-              <div className="dropdown">
-                <Link href="/destinations">Tours <span className="caret">▼</span></Link>
-                <div className="dropdown-menu">
-                  <Link href="/destinations">Group Tours</Link>
-                  <Link href="/destinations">Combo Tours</Link>
-                  <Link href="/destinations">Private Tours</Link>
+        <HeaderWrapper>
+          <header className="site-header">
+            <div className="container header-container" style={{ height: 'auto', minHeight: '70px', paddingTop: '10px', paddingBottom: '10px' }}>
+              <Link href="/" className="logo travanora-logo" style={{ alignSelf: 'center' }}>
+                {settings.site_logo_img ? (
+                  <img src={settings.site_logo_img} alt="Logo" className="site-logo" style={{ width: settings.logo_size ? `${settings.logo_size}px` : '48px', height: settings.logo_size ? `${settings.logo_size}px` : '48px' }} />
+                ) : (
+                  <span className="p-icon">T</span>
+                )}
+                <span className="site-title">{settings.site_name_main || 'TravaNora'} <span>{settings.site_name_sub || 'Travel'}</span></span>
+              </Link>
+              <nav className="main-nav">
+                <Link href="/">Home</Link>
+                <div className="dropdown">
+                  <Link href="/destinations">Tours <span className="caret">▼</span></Link>
+                  <div className="dropdown-menu">
+                    <Link href="/destinations">Group Tours</Link>
+                    <Link href="/destinations">Combo Tours</Link>
+                    <Link href="/destinations">Private Tours</Link>
+                  </div>
                 </div>
-              </div>
-              <Link href="/services/air-tickets">Air Tickets</Link>
-              <Link href="/services/visa">Visa</Link>
-              <Link href="/services">Our Services</Link>
-              <Link href="/about">About Us</Link>
-              <Link href="/contact">Contact Us</Link>
-              <Link href="/admin" className="admin-link">Admin</Link>
-            </nav>
-          </div>
-        </header>
+                <Link href="/services/air-tickets">Air Tickets</Link>
+                <Link href="/services/visa">Visa</Link>
+                <Link href="/services">Our Services</Link>
+                <Link href="/about">About Us</Link>
+                <Link href="/contact">Contact Us</Link>
+              </nav>
+            </div>
+          </header>
+        </HeaderWrapper>
 
         <main className="main-content">
           {children}
         </main>
 
-        <footer className="site-footer">
-          <div className="container footer-container" style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-            <div className="footer-col footer-intro">
-              <div className="logo travanora-logo mb-4" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 700 }}>
-                {settings.site_logo_img ? (
-                  <img src={settings.site_logo_img} alt="Logo" className="site-logo" />
-                ) : (
-                  <span className="p-icon">T</span>
-                )}
-                <span className="site-title">{settings.site_name_main || 'TravaNora'} <span>{settings.site_name_sub || 'Travel'}</span></span>
+        <FooterWrapper>
+          <footer className="site-footer">
+            <div className="container footer-container" style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+              <div className="footer-col footer-intro">
+                <div className="logo travanora-logo mb-4" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 700 }}>
+                  {settings.site_logo_img ? (
+                    <img src={settings.site_logo_img} alt="Logo" className="site-logo" style={{ width: settings.logo_size ? `${settings.logo_size}px` : '48px', height: settings.logo_size ? `${settings.logo_size}px` : '48px' }} />
+                  ) : (
+                    <span className="p-icon">T</span>
+                  )}
+                  <span className="site-title">{settings.site_name_main || 'TravaNora'} <span>{settings.site_name_sub || 'Travel'}</span></span>
+                </div>
+                <p style={{ color: '#94a3b8', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                  TravaNora Travel is more than a travel agency—it’s your gateway to experiencing the wonders of the world seamlessly.
+                </p>
+                <div className="social-media" style={{ display: 'flex', gap: '1rem' }}>
+                  <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>Facebook</a>
+                  <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>Instagram</a>
+                  <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>TikTok</a>
+                </div>
               </div>
-              <p style={{ color: '#94a3b8', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                TravaNora Travel is more than a travel agency—it’s your gateway to experiencing the wonders of the world seamlessly.
-              </p>
-              <div className="social-media" style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>Facebook</a>
-                <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>Instagram</a>
-                <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>TikTok</a>
+              
+              <div className="footer-col">
+                <h3>Explore</h3>
+                <ul className="footer-links">
+                  <li><Link href="/services/air-tickets">Air Tickets</Link></li>
+                  <li><Link href="/services/visa">Visa Services</Link></li>
+                  <li><Link href="/services">Our Services</Link></li>
+                  <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+                  <li><Link href="/terms">Terms & Conditions</Link></li>
+                </ul>
+              </div>
+              
+              <div className="footer-col ft-contacts">
+                <h3>Contact Us</h3>
+                <p style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', color: '#94a3b8' }}>
+                  <span style={{ color: 'var(--accent-color)' }}>📍</span> 
+                  <span>{settings.ft_address || '304, 3rd Floor, Jana Jaya City Mall, Rajagiriya, Sri Lanka.'}</span>
+                </p>
+                <p style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', color: '#94a3b8' }}>
+                  <span style={{ color: 'var(--accent-color)' }}>📞</span> 
+                  <span>
+                    <a href={`tel:${settings.ft_phone1 || '+94712225808'}`} style={{ color: 'white', fontWeight: 600 }}>{settings.ft_phone1 || '+94 71 22 25 808'}</a>
+                  </span>
+                </p>
+                <p style={{ display: 'flex', gap: '0.75rem', color: '#94a3b8' }}>
+                  <span style={{ color: 'var(--accent-color)' }}>✉️</span> 
+                  <a href={`mailto:${settings.ft_email || 'info@travanoratravel.com'}`} style={{ color: '#94a3b8' }}>{settings.ft_email || 'info@travanoratravel.com'}</a>
+                </p>
               </div>
             </div>
-            
-            <div className="footer-col">
-              <h3>Explore</h3>
-              <ul className="footer-links">
-                <li><Link href="/services/air-tickets">Air Tickets</Link></li>
-                <li><Link href="/services/visa">Visa Services</Link></li>
-                <li><Link href="/services">Our Services</Link></li>
-                <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-                <li><Link href="/terms">Terms & Conditions</Link></li>
-              </ul>
+            <div className="footer-bottom text-center pt-8 mt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <p style={{ color: '#64748b' }}>&copy; {new Date().getFullYear()} {settings.site_name_main || 'TravaNora'} {settings.site_name_sub || 'Travel'}. All rights reserved. <Link href="/admin" style={{ opacity: 0.3, textDecoration: 'none', marginLeft: '8px', cursor: 'pointer' }}>🔒</Link></p>
             </div>
-            
-            <div className="footer-col ft-contacts">
-              <h3>Contact Us</h3>
-              <p style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', color: '#94a3b8' }}>
-                <span style={{ color: 'var(--accent-color)' }}>📍</span> 
-                <span>{settings.ft_address || '304, 3rd Floor, Jana Jaya City Mall, Rajagiriya, Sri Lanka.'}</span>
-              </p>
-              <p style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', color: '#94a3b8' }}>
-                <span style={{ color: 'var(--accent-color)' }}>📞</span> 
-                <span>
-                  <a href={`tel:${settings.ft_phone1 || '+94712225808'}`} style={{ color: 'white', fontWeight: 600 }}>{settings.ft_phone1 || '+94 71 22 25 808'}</a>
-                </span>
-              </p>
-              <p style={{ display: 'flex', gap: '0.75rem', color: '#94a3b8' }}>
-                <span style={{ color: 'var(--accent-color)' }}>✉️</span> 
-                <a href={`mailto:${settings.ft_email || 'info@travanoratravel.com'}`} style={{ color: '#94a3b8' }}>{settings.ft_email || 'info@travanoratravel.com'}</a>
-              </p>
-            </div>
-          </div>
-          <div className="footer-bottom text-center pt-8 mt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <p style={{ color: '#64748b' }}>&copy; {new Date().getFullYear()} {settings.site_name_main || 'TravaNora'} {settings.site_name_sub || 'Travel'}. | All Rights Reserved</p>
-          </div>
-        </footer>
+          </footer>
 
-        <FloatingWhatsApp phoneNumber={settings.ft_phone1 || '94740077377'} />
+          <FloatingWhatsApp phoneNumber={settings.ft_phone1 || '94740077377'} />
+        </FooterWrapper>
       </body>
     </html>
   );

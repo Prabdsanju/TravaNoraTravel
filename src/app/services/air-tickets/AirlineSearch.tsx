@@ -32,46 +32,43 @@ const AIRLINES = [
 
 export default function AirlineSearch({ name, placeholder, selectedDestination }: { name: string, placeholder: string, selectedDestination?: string }) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<typeof AIRLINES>([]);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    let filtered = AIRLINES;
+  // Derive results directly during render to prevent synchronous state updates in useEffect
+  let filteredAirlines = AIRLINES;
 
-    // Smart logic: If a destination is selected, strictly filter airlines
-    if (selectedDestination) {
-      const dest = selectedDestination.toLowerCase();
-      
-      // Map destinations to regions
-      let region = '';
-      if (dest.includes('thailand') || dest.includes('singapore') || dest.includes('malaysia') || dest.includes('vietnam') || dest.includes('india') || dest.includes('cambodia')) {
-        region = 'Asia';
-      } else if (dest.includes('dubai') || dest.includes('uae') || dest.includes('qatar') || dest.includes('doha') || dest.includes('kuwait') || dest.includes('oman') || dest.includes('middle east')) {
-        region = 'Middle East';
-      } else if (dest.includes('london') || dest.includes('uk') || dest.includes('france') || dest.includes('paris') || dest.includes('germany') || dest.includes('europe')) {
-        region = 'Europe';
-      } else if (dest.includes('australia') || dest.includes('sydney') || dest.includes('melbourne')) {
-        region = 'Australia';
-      } else if (dest.includes('usa') || dest.includes('york')) {
-        region = 'USA';
-      }
-
-      if (region) {
-        // Filter: ONLY show airlines serving this region or 'Global'
-        filtered = AIRLINES.filter(a => a.regions.includes(region) || a.regions.includes('Global'));
-      }
+  if (selectedDestination) {
+    const dest = selectedDestination.toLowerCase();
+    
+    // Map destinations to regions
+    let region = '';
+    if (dest.includes('thailand') || dest.includes('singapore') || dest.includes('malaysia') || dest.includes('vietnam') || dest.includes('india') || dest.includes('cambodia')) {
+      region = 'Asia';
+    } else if (dest.includes('dubai') || dest.includes('uae') || dest.includes('qatar') || dest.includes('doha') || dest.includes('kuwait') || dest.includes('oman') || dest.includes('middle east')) {
+      region = 'Middle East';
+    } else if (dest.includes('london') || dest.includes('uk') || dest.includes('france') || dest.includes('paris') || dest.includes('germany') || dest.includes('europe')) {
+      region = 'Europe';
+    } else if (dest.includes('australia') || dest.includes('sydney') || dest.includes('melbourne')) {
+      region = 'Australia';
+    } else if (dest.includes('usa') || dest.includes('york')) {
+      region = 'USA';
     }
 
-    if (query.length > 0) {
-      filtered = filtered.filter(a => 
-        a.name.toLowerCase().includes(query.toLowerCase()) ||
-        a.code.toLowerCase().includes(query.toLowerCase())
-      );
+    if (region) {
+      // Filter: ONLY show airlines serving this region or 'Global'
+      filteredAirlines = AIRLINES.filter(a => a.regions.includes(region) || a.regions.includes('Global'));
     }
+  }
 
-    setResults(filtered.slice(0, 8));
-  }, [query, selectedDestination]);
+  if (query.length > 0) {
+    filteredAirlines = filteredAirlines.filter(a => 
+      a.name.toLowerCase().includes(query.toLowerCase()) ||
+      a.code.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  const results = filteredAirlines.slice(0, 8);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

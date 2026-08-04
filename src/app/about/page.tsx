@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function AboutPage() {
   return (
@@ -38,7 +38,7 @@ export default function AboutPage() {
               Crafting Stories Since the Beginning
             </h2>
             <p style={{ fontSize: '1.15rem', color: '#64748b', lineHeight: 1.9, marginBottom: '1.5rem' }}>
-              TravaNora Travel PVT LTD isn't just a travel agency; it's a dream realized. Born from a profound love for the diverse cultures and breathtaking landscapes of Southeast Asia, we've dedicated ourselves to uncovering the hidden gems that ordinary travelers often miss.
+              TravaNora Travel PVT LTD isn&apos;t just a travel agency; it&apos;s a dream realized. Born from a profound love for the diverse cultures and breathtaking landscapes of Southeast Asia, we&apos;ve dedicated ourselves to uncovering the hidden gems that ordinary travelers often miss.
             </p>
             <p style={{ fontSize: '1.15rem', color: '#64748b', lineHeight: 1.9 }}>
               Our journey started with a simple belief: that travel should be transformative. Today, we stand as a premier gateway to Thailand, Singapore, Malaysia, and Vietnam, serving thousands of happy travelers with personalized care.
@@ -132,7 +132,7 @@ export default function AboutPage() {
             <p style={{ fontSize: '1.25rem', opacity: 0.9, maxWidth: '700px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
               The world is waiting for you. Let our experts craft the perfect itinerary for your dream escape.
             </p>
-            <a href="/destinations" className="btn-primary" style={{ 
+            <Link href="/destinations" className="btn-primary" style={{ 
               backgroundColor: 'white', 
               color: 'var(--primary-color)', 
               padding: '1.25rem 3rem', 
@@ -141,7 +141,7 @@ export default function AboutPage() {
               fontWeight: 800
             }}>
               Explore Destinations 🌍
-            </a>
+            </Link>
           </div>
           {/* Decorative elements */}
           <div style={{ position: 'absolute', top: '-50px', left: '-50px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }}></div>

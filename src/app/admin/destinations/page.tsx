@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma';
 import { addDestination, deleteDestination, updateDestination, moveDestination } from '@/app/actions/destination';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDestinations() {
   const destinations = await prisma.destination.findMany({ orderBy: { position: 'asc' } });
 

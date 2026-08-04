@@ -49,3 +49,17 @@ export async function uploadMultipleImages(formData: FormData) {
   
   return urls;
 }
+
+export async function deleteImage(url: string | null | undefined) {
+  if (!url || !url.startsWith('/uploads/')) return;
+  
+  const filename = url.replace('/uploads/', '');
+  const filePath = path.join(process.cwd(), 'public', 'uploads', filename);
+  
+  try {
+    await fs.unlink(filePath);
+  } catch (e) {
+    // Ignore error if file doesn't exist
+    console.error(`Failed to delete old image: ${filePath}`, e);
+  }
+}

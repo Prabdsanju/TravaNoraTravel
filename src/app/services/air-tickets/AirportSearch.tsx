@@ -32,25 +32,18 @@ const AIRPORTS = [
 
 export default function AirportSearch({ name, placeholder, required, onSelect }: { name: string, placeholder: string, required?: boolean, onSelect?: (val: string) => void }) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<typeof AIRPORTS>([]);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (query.length < 2) {
-      setResults([]);
-      return;
-    }
-
-    const filtered = AIRPORTS.filter(a => 
-      a.name.toLowerCase().includes(query.toLowerCase()) ||
-      a.city.toLowerCase().includes(query.toLowerCase()) ||
-      a.code.toLowerCase().includes(query.toLowerCase()) ||
-      a.country.toLowerCase().includes(query.toLowerCase())
-    ).slice(0, 8);
-    
-    setResults(filtered);
-  }, [query]);
+  // Derive results directly during render to prevent synchronous state updates in useEffect
+  const results = query.length < 2
+    ? []
+    : AIRPORTS.filter(a => 
+        a.name.toLowerCase().includes(query.toLowerCase()) ||
+        a.city.toLowerCase().includes(query.toLowerCase()) ||
+        a.code.toLowerCase().includes(query.toLowerCase()) ||
+        a.country.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 8);
 
   // Close dropdown on click outside
   useEffect(() => {

@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DestinationsPage() {
   const destinations = await prisma.destination.findMany({
     include: { _count: { select: { packages: true } } },
@@ -15,7 +17,7 @@ export default async function DestinationsPage() {
       </p>
 
       <div className="grid md:grid-cols-2 gap-8 mt-8">
-        {destinations.map((dest: any) => (
+        {destinations.map((dest) => (
           <div key={dest.id} className="card" style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
             <div className="card-image" style={{
               width: '40%',

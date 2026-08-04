@@ -3,23 +3,24 @@ import { updateFlightStatus, deleteFlightRequest } from '@/app/actions/flight';
 import StatusSelector from '../StatusSelector';
 import DeleteButton from '../DeleteButton';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminFlights() {
   const flights = await prisma.flightRequest.findMany({
     orderBy: { createdAt: 'desc' }
   });
 
   return (
-    <div className="admin-container">
-      <div className="flex space-between align-center mb-6">
+    <>
+      <div className="flex space-between align-center mb-6" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 className="text-primary font-bold" style={{ fontSize: '1.5rem' }}>Flight Inquiries</h1>
         <div className="text-light" style={{ fontSize: '0.875rem' }}>
           Total Inquiries: {flights.length}
         </div>
       </div>
 
-      <div className="card">
-        <div className="card-body" style={{ padding: 0, overflowX: 'auto' }}>
-          <table className="admin-table">
+      <div className="table-wrapper">
+        <table className="table">
             <thead>
               <tr>
                 <th>Date</th>
@@ -88,8 +89,7 @@ export default async function AdminFlights() {
               )}
             </tbody>
           </table>
-        </div>
       </div>
-    </div>
+    </>
   );
 }

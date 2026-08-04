@@ -3,6 +3,8 @@ import { updateBookingStatus, deleteBooking } from '@/app/actions/booking';
 import StatusSelector from '../StatusSelector';
 import DeleteButton from '../DeleteButton';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminBookings() {
   const bookings = await prisma.booking.findMany({ 
     include: { package: true },
@@ -46,12 +48,13 @@ export default async function AdminBookings() {
                 <td>
                   <StatusSelector 
                     id={booking.id} 
-                    currentStatus={booking.status === 'CONFIRMED' ? 'COMPLETED' : booking.status} 
-                    updateAction={async (id, status) => {
-                      'use server';
-                      const finalStatus = status === 'COMPLETED' ? 'CONFIRMED' : status;
-                      await updateBookingStatus(id, finalStatus);
-                    }} 
+                    currentStatus={booking.status} 
+                    updateAction={updateBookingStatus} 
+                    options={[
+                      { value: 'PENDING', label: 'Pending', color: { bg: '#fffbeb', border: '#fcd34d', text: '#b45309' } },
+                      { value: 'CONFIRMED', label: 'Confirmed', color: { bg: '#ecfdf5', border: '#6ee7b7', text: '#047857' } },
+                      { value: 'CANCELLED', label: 'Cancelled', color: { bg: '#fef2f2', border: '#fca5a5', text: '#b91c1c' } }
+                    ]}
                   />
                 </td>
                 <td>

@@ -29,13 +29,13 @@ export function AnimatedPhilosophy({ settings }: { settings: any }) {
             }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             style={{ 
-              height: '300px', 
-              borderRadius: '30px', 
+              height: '350px', 
+              borderRadius: 'var(--radius)', 
               backgroundImage: `url(${imgUrl})`, 
               backgroundSize: 'cover', 
               backgroundPosition: 'center', 
-              boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)',
-              marginTop: idx === 1 ? '2rem' : idx === 2 ? '-2rem' : '0'
+              boxShadow: '0 20px 40px -10px rgba(0,0,0,0.15)',
+              marginTop: idx === 1 ? '3rem' : idx === 2 ? '-3rem' : '0'
             }}
           />
         ))}
@@ -47,11 +47,11 @@ export function AnimatedPhilosophy({ settings }: { settings: any }) {
         transition={{ duration: 0.8 }}
         className="content-block"
       >
-        <span style={{ color: 'var(--accent-color)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '0.875rem', display: 'block', marginBottom: '1.5rem' }}>Our Philosophy</span>
-        <h2 style={{ fontSize: '3.5rem', fontWeight: 900, color: '#1e293b', lineHeight: 1.1, marginBottom: '2rem' }}>
+        <span style={{ color: 'var(--accent-color)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '0.875rem', display: 'block', marginBottom: '1.5rem' }}>Our Philosophy</span>
+        <h2 style={{ fontSize: '3rem', fontWeight: 700, color: 'var(--primary-color)', lineHeight: 1.2, marginBottom: '2rem', textTransform: 'uppercase' }}>
           {settings.about_title || 'Crafting Journeys with Care and Passion'}
         </h2>
-        <p style={{ fontSize: '1.125rem', color: '#64748b', lineHeight: 1.8, marginBottom: '2.5rem' }}>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-light)', lineHeight: 1.8, marginBottom: '2.5rem', fontWeight: 300 }}>
           {settings.about_text || 'We believe travel is more than just a destination...'}
         </p>
       </motion.div>
@@ -77,8 +77,8 @@ export function AnimatedPersonalize({ settings }: { settings: any }) {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <div className="section-head" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
-            <h3 className="section-title">{settings.personalize_title || 'Personalize your tour'}</h3>
+        <div className="section-head" style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <h3 className="section-title" style={{ fontWeight: 700, textTransform: 'uppercase', color: 'var(--primary-color)' }}>{settings.personalize_title || 'Personalize your tour'}</h3>
         </div>  
         <div className="icon-content">
             {[1,2,3].map(n => (
