@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { saveSiteSettings } from '@/app/actions/settings';
 
 const InputField = ({ label, name, value, defaultValue, onChange, type = "text", icon = "📝", preview = "" }: any) => (
@@ -638,7 +639,7 @@ export default function SettingsForm({
                       <div style={{ marginTop: '3rem', borderTop: '1px solid #f1f5f9', paddingTop: '3rem' }}>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '1.5rem' }}>🌍 Packages Section</h3>
                         <p style={{ marginBottom: '2rem', color: '#64748b' }}>
-                          💡 <strong>Pro Tip:</strong> You can add, edit, or delete the actual Tour Packages directly from the <a href="/admin/packages" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Packages Page</a> and <a href="/admin/destinations" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Destinations Page</a>. They will automatically sync with the homepage!
+                          💡 <strong>Pro Tip:</strong> You can add, edit, or delete the actual Tour Packages directly from the <Link href="/admin/packages" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Packages Page</Link> and <Link href="/admin/destinations" style={{ color: '#3b82f6', textDecoration: 'underline' }}>Destinations Page</Link>. They will automatically sync with the homepage!
                         </p>
                         <InputField label="Packages Prefix" name="setting_pkg_prefix" defaultValue={initialSettings.pkg_prefix || 'Explore Destinations'} icon="🏷️" />
                         <InputField label="Packages Title" name="setting_pkg_title" defaultValue={initialSettings.pkg_title || 'Join us on a group adventure'} icon="✒️" />
