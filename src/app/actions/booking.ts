@@ -2,17 +2,25 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { requireAdminAuth } from '@/lib/auth-session';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function submitBooking(formData: FormData) {
-  const name = formData.get('name') as string;
-  const email = (formData.get('email') as string) || null;
-  const phone = formData.get('phone') as string;
-  const guests = parseInt(formData.get('guests') as string);
-  const children = parseInt(formData.get('children') as string) || 0;
-  const childrenAges = (formData.get('childrenAges') as string) || null;
+  // Rate limit: Max 10 bookings per 10 minutes to prevent spam / bot attacks
+  const rateLimit = checkRateLimit('public_booking_submission', 10, 10 * 60 * 1000);
+  if (!rateLimit.success) {
+    throw new Error(`Too many submissions. Please wait ${rateLimit.resetTime} seconds before submitting again.`);
+  }
+
+  const name = (formData.get('name') as string)?.trim()?.slice(0, 100);
+  const emailRaw = (formData.get('email') as string)?.trim()?.slice(0, 120);
+  const email = emailRaw || null;
+  const phone = (formData.get('phone') as string)?.trim()?.slice(0, 30);
+  const guests = parseInt(formData.get('guests') as string, 10);
+  const children = parseInt(formData.get('children') as string, 10) || 0;
+  const childrenAges = ((formData.get('childrenAges') as string)?.trim()?.slice(0, 100)) || null;
   const nightsStr = formData.get('nights') as string;
-  const nights = nightsStr ? parseInt(nightsStr) : null;
+  const nights = nightsStr ? parseInt(nightsStr, 10) : null;
   const travelDateStr = formData.get('travelDate') as string;
   let travelDate: Date | null = null;
   
@@ -25,30 +33,29 @@ export async function submitBooking(formData: FormData) {
       }
     }
   } catch (e) {
-    console.error("Date parsing failed for:", travelDateStr);
     throw new Error("Please select a valid travel date.");
   }
 
-  const packageId = formData.get('packageId') as string;
-  const packageTitle = formData.get('packageTitle') as string;
+  const packageId = (formData.get('packageId') as string)?.trim();
+  const packageTitle = (formData.get('packageTitle') as string)?.trim()?.slice(0, 150) || '';
 
   if (!name || !phone || !packageId || !travelDate) {
-    console.error("Booking failed: Missing required fields", { name, phone, packageId, travelDateStr });
     throw new Error("Please provide all required fields, including a valid travel date.");
   }
 
-  console.log("Attempting to create booking for:", { name, packageId, date: travelDate.toISOString() });
-
-  let newBooking;
-  try {
-    newBooking = await prisma.booking.create({
-      data: { name, email, phone, guests, children, childrenAges, nights, travelDate, packageId },
-    });
-    console.log("Booking created successfully:", newBooking.id);
-  } catch (dbError: any) {
-    console.error("Prisma Database Error:", dbError);
-    throw new Error(`Database error: ${dbError.message || "Could not save booking"}`);
-  }
+  await prisma.booking.create({
+    data: { 
+      name, 
+      email, 
+      phone, 
+      guests: isNaN(guests) || guests < 1 ? 1 : guests, 
+      children: isNaN(children) || children < 0 ? 0 : children, 
+      childrenAges, 
+      nights: nights && nights > 0 ? nights : null, 
+      travelDate, 
+      packageId 
+    },
+  });
 
   revalidatePath('/admin/bookings');
 
@@ -73,11 +80,19 @@ export async function submitBooking(formData: FormData) {
 }
 
 export async function deleteBooking(id: string) {
+  await requireAdminAuth();
+
+  if (!id) throw new Error("Booking ID is required");
+
   await prisma.booking.delete({ where: { id } });
   revalidatePath('/admin/bookings');
 }
 
 export async function updateBookingStatus(id: string, status: string) {
+  await requireAdminAuth();
+
+  if (!id || !status) throw new Error("Booking ID and Status are required");
+
   await prisma.booking.update({
     where: { id },
     data: { status },

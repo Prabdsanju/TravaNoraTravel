@@ -2,26 +2,35 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { requireAdminAuth } from '@/lib/auth-session';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function submitVisaRequest(formData: FormData) {
-  const country = formData.get('country') as string;
-  const visaType = formData.get('visaType') as string;
-  const applicants = parseInt(formData.get('applicants') as string) || 1;
-  const travelDate = new Date(formData.get('travelDate') as string);
-  const name = formData.get('name') as string;
-  const phone = formData.get('phone') as string;
-  const email = formData.get('email') as string;
-  const messageText = formData.get('message') as string;
-
-  if (!country || !visaType || !travelDate || !name || !phone) {
-    throw new Error("Missing required fields");
+  // Rate limit: Max 10 visa inquiries per 10 minutes to prevent spam
+  const rateLimit = checkRateLimit('public_visa_submission', 10, 10 * 60 * 1000);
+  if (!rateLimit.success) {
+    throw new Error(`Too many submissions. Please wait ${rateLimit.resetTime} seconds before submitting again.`);
   }
 
-  const request = await prisma.visaRequest.create({
+  const country = (formData.get('country') as string)?.trim()?.slice(0, 100);
+  const visaType = (formData.get('visaType') as string)?.trim()?.slice(0, 100);
+  const applicants = parseInt(formData.get('applicants') as string, 10) || 1;
+  const travelDateStr = formData.get('travelDate') as string;
+  const travelDate = new Date(travelDateStr);
+  const name = (formData.get('name') as string)?.trim()?.slice(0, 100);
+  const phone = (formData.get('phone') as string)?.trim()?.slice(0, 30);
+  const email = (formData.get('email') as string)?.trim()?.slice(0, 120);
+  const messageText = (formData.get('message') as string)?.trim()?.slice(0, 2000);
+
+  if (!country || !visaType || !travelDateStr || isNaN(travelDate.getTime()) || !name || !phone) {
+    throw new Error("Missing required fields or invalid date");
+  }
+
+  await prisma.visaRequest.create({
     data: {
       country,
       visaType,
-      applicants,
+      applicants: applicants < 1 ? 1 : applicants,
       travelDate,
       name,
       phone,
@@ -54,6 +63,10 @@ _Please assist with the visa process._`;
 }
 
 export async function updateVisaStatus(id: string, status: string) {
+  await requireAdminAuth();
+
+  if (!id || !status) throw new Error("Visa ID and Status are required");
+
   await prisma.visaRequest.update({
     where: { id },
     data: { status },
@@ -62,6 +75,10 @@ export async function updateVisaStatus(id: string, status: string) {
 }
 
 export async function deleteVisaRequest(id: string) {
+  await requireAdminAuth();
+
+  if (!id) throw new Error("Visa ID is required");
+
   await prisma.visaRequest.delete({ where: { id } });
   revalidatePath('/admin/visas');
 }

@@ -3,34 +3,38 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, uploadMultipleImages } from './upload';
+import { requireAdminAuth } from '@/lib/auth-session';
 
 export async function addPackage(formData: FormData) {
-  const title = formData.get('title') as string;
-  const description = formData.get('description') as string;
-  const itinerary = formData.get('itinerary') as string;
-  const inclusions = formData.get('inclusions') as string;
-  const exclusions = formData.get('exclusions') as string;
+  await requireAdminAuth();
+
+  const title = (formData.get('title') as string)?.trim();
+  const description = (formData.get('description') as string)?.trim();
+  const itinerary = (formData.get('itinerary') as string)?.trim();
+  const inclusions = (formData.get('inclusions') as string)?.trim();
+  const exclusions = (formData.get('exclusions') as string)?.trim();
   const price = parseFloat(formData.get('price') as string);
-  const days = parseInt(formData.get('days') as string);
-  const nights = parseInt(formData.get('nights') as string);
-  const destinationId = formData.get('destinationId') as string;
+  const days = parseInt(formData.get('days') as string, 10);
+  const nights = parseInt(formData.get('nights') as string, 10);
+  const destinationId = (formData.get('destinationId') as string)?.trim();
 
   const uploadUrl = await uploadImage(formData);
-  const imageUrl = uploadUrl || formData.get('imageUrl') as string;
+  const imageUrl = uploadUrl || (formData.get('imageUrl') as string)?.trim();
   const galleryUrls = await uploadMultipleImages(formData);
 
   if (!title || !destinationId) throw new Error("Title and destination are required");
+  if (isNaN(price) || price < 0) throw new Error("A valid positive price is required");
 
   await prisma.package.create({
     data: { 
       title, 
-      description, 
-      itinerary,
-      inclusions,
-      exclusions,
+      description: description || '', 
+      itinerary: itinerary || '',
+      inclusions: inclusions || '',
+      exclusions: exclusions || '',
       price, 
-      days, 
-      nights, 
+      days: isNaN(days) ? 1 : days, 
+      nights: isNaN(nights) ? 0 : nights, 
       imageUrl, 
       destinationId,
       images: {
@@ -45,6 +49,10 @@ export async function addPackage(formData: FormData) {
 }
 
 export async function deletePackage(id: string) {
+  await requireAdminAuth();
+
+  if (!id) throw new Error("Package ID is required");
+
   await prisma.package.delete({
     where: { id },
   });
@@ -54,29 +62,34 @@ export async function deletePackage(id: string) {
 }
 
 export async function updatePackage(formData: FormData) {
+  await requireAdminAuth();
+
   const id = formData.get('id') as string;
-  const title = formData.get('title') as string;
-  const description = formData.get('description') as string;
-  const itinerary = formData.get('itinerary') as string;
-  const inclusions = formData.get('inclusions') as string;
-  const exclusions = formData.get('exclusions') as string;
+  const title = (formData.get('title') as string)?.trim();
+  const description = (formData.get('description') as string)?.trim();
+  const itinerary = (formData.get('itinerary') as string)?.trim();
+  const inclusions = (formData.get('inclusions') as string)?.trim();
+  const exclusions = (formData.get('exclusions') as string)?.trim();
   const price = parseFloat(formData.get('price') as string);
-  const days = parseInt(formData.get('days') as string);
-  const nights = parseInt(formData.get('nights') as string);
-  const destinationId = formData.get('destinationId') as string;
+  const days = parseInt(formData.get('days') as string, 10);
+  const nights = parseInt(formData.get('nights') as string, 10);
+  const destinationId = (formData.get('destinationId') as string)?.trim();
+
+  if (!id) throw new Error("Package ID is required");
+  if (!title || !destinationId) throw new Error("Title and destination are required");
 
   const uploadUrl = await uploadImage(formData);
-  const imageUrl = uploadUrl || formData.get('imageUrl') as string;
+  const imageUrl = uploadUrl || (formData.get('imageUrl') as string)?.trim();
 
   const dataToUpdate: any = { 
     title, 
-    description, 
-    itinerary,
-    inclusions,
-    exclusions,
-    price, 
-    days, 
-    nights, 
+    description: description || '', 
+    itinerary: itinerary || '',
+    inclusions: inclusions || '',
+    exclusions: exclusions || '',
+    price: isNaN(price) ? 0 : price, 
+    days: isNaN(days) ? 1 : days, 
+    nights: isNaN(nights) ? 0 : nights, 
     destinationId 
   };
   
@@ -97,7 +110,11 @@ export async function updatePackage(formData: FormData) {
 }
 
 export async function addPackageImages(formData: FormData) {
+  await requireAdminAuth();
+
   const packageId = formData.get('packageId') as string;
+  if (!packageId) throw new Error("Package ID is required");
+
   const urls = await uploadMultipleImages(formData);
 
   if (urls.length > 0) {
@@ -116,6 +133,10 @@ export async function addPackageImages(formData: FormData) {
 }
 
 export async function deletePackageImage(imageId: string, packageId: string) {
+  await requireAdminAuth();
+
+  if (!imageId || !packageId) throw new Error("Image ID and Package ID are required");
+
   await prisma.packageImage.delete({
     where: { id: imageId }
   });

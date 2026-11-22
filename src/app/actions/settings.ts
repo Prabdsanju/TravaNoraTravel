@@ -3,8 +3,11 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, deleteImage } from './upload';
+import { requireAdminAuth } from '@/lib/auth-session';
 
 export async function saveSiteSettings(formData: FormData) {
+  await requireAdminAuth();
+
   // 0. Fetch existing settings to manage old files
   const oldSettings = await getSiteSettings();
 
@@ -44,6 +47,12 @@ export async function saveSiteSettings(formData: FormData) {
   for (const [key, value] of formData.entries()) {
     if (typeof value === 'string' && key.startsWith('setting_')) {
       const actualKey = key.replace('setting_', '');
+      
+      // Prevent tampering with internal security credentials via settings form
+      if (actualKey === 'admin_password_hash' || actualKey === 'admin_recovery_pin_hash') {
+        continue;
+      }
+
       let finalValue = value;
 
       // Special handling for dynamic hero slides JSON
