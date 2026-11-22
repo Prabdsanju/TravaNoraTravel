@@ -24,8 +24,11 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: '/logo-circle.svg',
-    apple: '/logo-circle.svg',
+    icon: [
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/logo-circle.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/icon.png',
   },
 };
 
