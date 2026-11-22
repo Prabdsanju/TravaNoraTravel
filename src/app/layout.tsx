@@ -63,14 +63,14 @@ export default async function RootLayout({
               "logo": "https://www.travanoratravel.com/icon.png",
               "image": "https://www.travanoratravel.com/og-image.jpg",
               "description": "Premier Travel Agency in Sri Lanka offering curated tours to Thailand, Singapore, Malaysia, Vietnam, Dubai, and India, along with air ticketing and visa assistance.",
-              "telephone": "+94712225808",
+              "telephone": "+94712522808",
               "priceRange": "$$",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "304, 3rd Floor, Jana Jaya City Mall",
+                "streetAddress": "234/7, Gamunumawatha, Kotuwegoda",
                 "addressLocality": "Rajagiriya",
                 "addressRegion": "Western Province",
-                "postalCode": "10107",
+                "postalCode": "10100",
                 "addressCountry": "LK"
               },
               "geo": {
@@ -149,7 +149,7 @@ export default async function RootLayout({
                   <a href="#" className="social-icon" style={{ color: 'var(--accent-color)' }}>TikTok</a>
                 </div>
               </div>
-              
+
               <div className="footer-col">
                 <h3>Explore</h3>
                 <ul className="footer-links">
@@ -160,21 +160,21 @@ export default async function RootLayout({
                   <li><Link href="/terms">Terms & Conditions</Link></li>
                 </ul>
               </div>
-              
+
               <div className="footer-col ft-contacts">
                 <h3>Contact Us</h3>
                 <p style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', color: '#94a3b8' }}>
-                  <span style={{ color: 'var(--accent-color)' }}>📍</span> 
-                  <span>{settings.ft_address || '304, 3rd Floor, Jana Jaya City Mall, Rajagiriya, Sri Lanka.'}</span>
+                  <span style={{ color: 'var(--accent-color)' }}>📍</span>
+                  <span>{settings.ft_address || '234/7, Gamunumawatha, Kotuwegoda, Rajagiriya 10100, Sri Lanka.'}</span>
                 </p>
                 <p style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', color: '#94a3b8' }}>
-                  <span style={{ color: 'var(--accent-color)' }}>📞</span> 
+                  <span style={{ color: 'var(--accent-color)' }}>📞</span>
                   <span>
-                    <a href={`tel:${settings.ft_phone1 || '+94712225808'}`} style={{ color: 'white', fontWeight: 600 }}>{settings.ft_phone1 || '+94 71 22 25 808'}</a>
+                    <a href={`tel:${settings.ft_phone1 || '+94712522808'}`} style={{ color: 'white', fontWeight: 600 }}>{settings.ft_phone1 || '+94 71 25 22 808'}</a>
                   </span>
                 </p>
                 <p style={{ display: 'flex', gap: '0.75rem', color: '#94a3b8' }}>
-                  <span style={{ color: 'var(--accent-color)' }}>✉️</span> 
+                  <span style={{ color: 'var(--accent-color)' }}>✉️</span>
                   <a href={`mailto:${settings.ft_email || 'info@travanoratravel.com'}`} style={{ color: '#94a3b8' }}>{settings.ft_email || 'info@travanoratravel.com'}</a>
                 </p>
               </div>

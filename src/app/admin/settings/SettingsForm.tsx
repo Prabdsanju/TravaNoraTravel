@@ -717,9 +717,9 @@ export default function SettingsForm({
                   <div style={{ display: 'grid', gap: '2.5rem' }}>
                     <div style={{ background: 'white', padding: '3.5rem', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }}>
                       <h2 style={{ fontSize: '1.75rem', fontWeight: 900, marginBottom: '2.5rem' }}>Footer Contact Info</h2>
-                      <InputField label="Footer Address" name="setting_ft_address" defaultValue={initialSettings.ft_address || '304, 3rd Floor, Jana Jaya City Mall, Rajagiriya, Sri Lanka.'} type="textarea" icon="📍" />
-                      <InputField label="Footer Phone" name="setting_ft_phone1" defaultValue={initialSettings.ft_phone1 || '+94 71 22 25 808'} icon="📞" />
-                      <InputField label="Footer Email" name="setting_ft_email" defaultValue={initialSettings.ft_email || 'info@travanoratravel.com'} icon="✉️" />
+                      <InputField label="Footer Address" name="setting_ft_address" defaultValue={initialSettings.ft_address || '234/7, Gamunumawatha, Kotuwegoda, Rajagiriya 10100, Sri Lanka.'} type="textarea" icon="📍" />
+                      <InputField label="Footer Phone" name="setting_ft_phone1" defaultValue={initialSettings.ft_phone1 || '+94 71 25 22 808'} icon="📞" />
+                      <InputField label="Footer Email" name="setting_ft_email" defaultValue={initialSettings.ft_email || 'travanoratravel@gmail.com'} icon="✉️" />
                     </div>
 
                     <div style={{ background: 'white', padding: '3.5rem', borderRadius: '40px', border: '1px solid #f1f5f9', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }}>
@@ -733,7 +733,7 @@ export default function SettingsForm({
                       <h2 style={{ fontSize: '1.75rem', fontWeight: 900, marginBottom: '2.5rem' }}>Contact Info Cards</h2>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                         <InputField label="Office Card Title" name="setting_contact_office_title" defaultValue={initialSettings.contact_office_title || 'Our Office'} icon="🏢" />
-                        <InputField label="Office Card Content" name="setting_contact_office_text" defaultValue={initialSettings.contact_office_text || '304, 3rd Floor, Jana Jaya City Mall, Rajagiriya, Sri Lanka.'} type="textarea" icon="📍" />
+                        <InputField label="Office Card Content" name="setting_contact_office_text" defaultValue={initialSettings.contact_office_text || '234/7, Gamunumawatha, Kotuwegoda, Rajagiriya 10100, Sri Lanka.'} type="textarea" icon="📍" />
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                         <InputField label="Phone Card Title" name="setting_contact_phone_title" defaultValue={initialSettings.contact_phone_title || 'Call Us'} icon="📱" />

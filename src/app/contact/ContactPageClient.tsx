@@ -79,13 +79,13 @@ export default function ContactPageClient({ settings }: ContactPageClientProps) 
   const bannerSubtitle = settings.contact_subtitle || "Whether you have a specific travel question or just want to say hi, our team is ready to help you plan your next adventure.";
 
   const officeTitle = settings.contact_office_title || 'Our Office';
-  const officeText = settings.contact_office_text || '304, 3rd Floor, Jana Jaya City Mall, Rajagiriya, Sri Lanka.';
+  const officeText = settings.contact_office_text || '234/7, Gamunumawatha, Kotuwegoda, Rajagiriya 10100, Sri Lanka.';
 
   const phoneTitle = settings.contact_phone_title || 'Call Us';
-  const phoneText = settings.contact_phone_text || '+94 71 22 25 808\nAvailable 9 AM - 6 PM';
+  const phoneText = settings.contact_phone_text || '+94 71 25 22 808\n+94 76 91 22 808\nAvailable 9 AM - 6 PM';
 
   const emailTitle = settings.contact_email_title || 'Email Us';
-  const emailText = settings.contact_email_text || 'info@travanoratravel.com\nbooking@travanoratravel.com';
+  const emailText = settings.contact_email_text || 'travanoratravel@gmail.com\ninfo@travanoratravel.com';
 
   const formTitle = settings.contact_form_title || 'Send Us a Message';
   const formSubmitBtnText = settings.contact_submit_btn || 'Send to WhatsApp Directly';
