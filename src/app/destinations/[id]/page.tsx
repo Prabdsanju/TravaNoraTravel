@@ -9,25 +9,37 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const destination = await prisma.destination.findUnique({
     where: { id },
+    include: { packages: true }
   });
 
   if (!destination) {
     return {
-      title: 'Destination | TravaNora Travel',
+      title: 'Tour Packages from Sri Lanka | TravaNora Travel',
     };
   }
 
-  const title = `${destination.name} Tour Packages | TravaNora Travel`;
-  const description = destination.description?.slice(0, 160) || `Explore customized holiday packages in ${destination.name} with TravaNora Travel Sri Lanka.`;
+  const minPrice = destination.packages && destination.packages.length > 0 
+    ? Math.min(...destination.packages.map(p => p.price)) 
+    : null;
+  const priceSnippet = minPrice ? ` Starting from LKR ${minPrice.toLocaleString()} per person.` : '';
+  const title = `${destination.name} Tour Packages from Sri Lanka | TravaNora Travel`;
+  const description = `All-inclusive ${destination.name} tour packages from Sri Lanka.${priceSnippet} Customized holiday itineraries, luxury hotels, flights & visa assistance with TravaNora Travel.`;
 
   return {
     title,
     description,
+    keywords: `${destination.name.toLowerCase()} tour packages from sri lanka, ${destination.name.toLowerCase()} holiday packages sri lanka, travel to ${destination.name.toLowerCase()} from colombo, ${destination.name.toLowerCase()} tours, travanora travel`,
     openGraph: {
       title,
       description,
       url: `https://travanoratravel.com/destinations/${destination.id}`,
-      images: destination.imageUrl ? [{ url: destination.imageUrl, width: 1200, height: 630, alt: destination.name }] : undefined,
+      images: destination.imageUrl ? [{ url: destination.imageUrl, width: 1200, height: 630, alt: `${destination.name} Tour Packages from Sri Lanka` }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: destination.imageUrl ? [destination.imageUrl] : undefined,
     },
   };
 }
@@ -41,8 +53,38 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
 
   if (!destination) notFound();
 
+  const destinationSchema = {
+    "@context": "https://schema.org",
+    "@type": "TouristDestination",
+    "name": `${destination.name} Tour Packages from Sri Lanka`,
+    "description": destination.description,
+    "image": destination.imageUrl,
+    "touristType": "Leisure",
+    "includesAttraction": destination.packages.map(p => ({
+      "@type": "TouristTrip",
+      "name": p.title,
+      "description": p.description,
+      "offers": {
+        "@type": "Offer",
+        "price": p.price,
+        "priceCurrency": "LKR",
+        "availability": "https://schema.org/InStock",
+        "url": `https://travanoratravel.com/packages/${p.id}`
+      }
+    })),
+    "provider": {
+      "@type": "TravelAgency",
+      "name": "TravaNora Travel PVT LTD",
+      "url": "https://travanoratravel.com"
+    }
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(destinationSchema) }}
+      />
       <section className="hero-section" style={{
         background: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url("${destination.imageUrl || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1000'}")`,
         backgroundSize: 'cover',

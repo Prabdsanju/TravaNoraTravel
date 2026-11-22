@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://travanoratravel.com'),
   title: "TravaNora Travel PVT LTD | Premier Travel Agency in Sri Lanka",
   description: "Experience unforgettable journeys to Thailand, Singapore, Malaysia, and Vietnam with TravaNora Travel. Expertly crafted tour packages, seamless air ticketing, and hassle-free visa assistance.",
-  keywords: "travel agency sri lanka, thailand tour packages from sri lanka, singapore tours, malaysia holiday packages, visa assistance sri lanka, cheap air tickets sri lanka, travanora travel",
+  keywords: "thailand tour package from sri lanka, singapore tour packages from sri lanka, malaysia holiday packages from sri lanka, vietnam tour packages from sri lanka, dubai tour packages from sri lanka, india tour packages from sri lanka, travel agency sri lanka, cheap air tickets sri lanka, travanora travel",
   authors: [{ name: "TravaNora Travel" }],
   openGraph: {
     title: "TravaNora Travel PVT LTD | Explore Asia with Ease",
