@@ -60,14 +60,33 @@ export default async function RootLayout({
               "@type": "TravelAgency",
               "name": "TravaNora Travel PVT LTD",
               "url": "https://www.travanoratravel.com",
-              "logo": "https://www.travanoratravel.com/logo-circle.svg",
+              "logo": "https://www.travanoratravel.com/icon.png",
               "image": "https://www.travanoratravel.com/og-image.jpg",
-              "description": "Premier Travel Agency in Sri Lanka offering curated tours to Thailand, Singapore, Malaysia, and Vietnam, along with air ticketing and visa assistance.",
+              "description": "Premier Travel Agency in Sri Lanka offering curated tours to Thailand, Singapore, Malaysia, Vietnam, Dubai, and India, along with air ticketing and visa assistance.",
+              "telephone": "+94712225808",
+              "priceRange": "$$",
               "address": {
                 "@type": "PostalAddress",
+                "streetAddress": "304, 3rd Floor, Jana Jaya City Mall",
+                "addressLocality": "Rajagiriya",
+                "addressRegion": "Western Province",
+                "postalCode": "10107",
                 "addressCountry": "LK"
               },
-              "priceRange": "$$"
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 6.9091737,
+                "longitude": 79.9079927
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                  "opens": "09:00",
+                  "closes": "18:00"
+                }
+              ],
+              "hasMap": "https://www.google.com/maps/place/TravaNora+Travel+PVT+LTD/@6.9091737,79.9079927,17z"
             })
           }}
         />
