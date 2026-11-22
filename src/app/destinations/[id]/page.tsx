@@ -1,8 +1,36 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const destination = await prisma.destination.findUnique({
+    where: { id },
+  });
+
+  if (!destination) {
+    return {
+      title: 'Destination | TravaNora Travel',
+    };
+  }
+
+  const title = `${destination.name} Tour Packages | TravaNora Travel`;
+  const description = destination.description?.slice(0, 160) || `Explore customized holiday packages in ${destination.name} with TravaNora Travel Sri Lanka.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://travanoratravel.com/destinations/${destination.id}`,
+      images: destination.imageUrl ? [{ url: destination.imageUrl, width: 1200, height: 630, alt: destination.name }] : undefined,
+    },
+  };
+}
 
 export default async function DestinationDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

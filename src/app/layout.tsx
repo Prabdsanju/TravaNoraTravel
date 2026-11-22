@@ -3,6 +3,7 @@ import "./globals.css";
 import Link from 'next/link';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://travanoratravel.com'),
   title: "TravaNora Travel PVT LTD | Premier Travel Agency in Sri Lanka",
   description: "Experience unforgettable journeys to Thailand, Singapore, Malaysia, and Vietnam with TravaNora Travel. Expertly crafted tour packages, seamless air ticketing, and hassle-free visa assistance.",
   keywords: "travel agency sri lanka, thailand tour packages from sri lanka, singapore tours, malaysia holiday packages, visa assistance sri lanka, cheap air tickets sri lanka, travanora travel",
@@ -45,6 +46,25 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "TravelAgency",
+              "name": "TravaNora Travel PVT LTD",
+              "url": "https://travanoratravel.com",
+              "logo": "https://travanoratravel.com/logo-circle.svg",
+              "image": "https://travanoratravel.com/og-image.jpg",
+              "description": "Premier Travel Agency in Sri Lanka offering curated tours to Thailand, Singapore, Malaysia, and Vietnam, along with air ticketing and visa assistance.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "LK"
+              },
+              "priceRange": "$$"
+            })
+          }}
+        />
       </head>
       <body suppressHydrationWarning>
         <VisitTracker />

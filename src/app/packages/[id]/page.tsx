@@ -1,10 +1,45 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 import BookingForm from './BookingForm';
 import ImageSlider from './ImageSlider';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const pkg = await prisma.package.findUnique({
+    where: { id },
+    include: { destination: true }
+  });
+
+  if (!pkg) {
+    return {
+      title: 'Tour Package | TravaNora Travel',
+    };
+  }
+
+  const title = `${pkg.title} - ${pkg.days}D/${pkg.nights}N | TravaNora Travel`;
+  const description = pkg.description?.slice(0, 160) || `Experience ${pkg.title} in ${pkg.destination.name} with TravaNora Travel.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://travanoratravel.com/packages/${pkg.id}`,
+      images: pkg.imageUrl ? [{ url: pkg.imageUrl, width: 1200, height: 630, alt: pkg.title }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: pkg.imageUrl ? [pkg.imageUrl] : undefined,
+    },
+  };
+}
 
 export default async function PackageDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -29,8 +64,43 @@ export default async function PackageDetail({ params }: { params: Promise<{ id: 
     sliderImages.push('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1000');
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    "name": pkg.title,
+    "description": pkg.description,
+    "touristType": "Leisure",
+    "offers": {
+      "@type": "Offer",
+      "price": pkg.price,
+      "priceCurrency": "LKR",
+      "availability": "https://schema.org/InStock",
+      "url": `https://travanoratravel.com/packages/${pkg.id}`
+    },
+    "itinerary": {
+      "@type": "ItemList",
+      "numberOfItems": pkg.days,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": `Explore ${pkg.destination.name}`
+        }
+      ]
+    },
+    "provider": {
+      "@type": "TravelAgency",
+      "name": "TravaNora Travel PVT LTD",
+      "url": "https://travanoratravel.com"
+    }
+  };
+
   return (
     <div className="container py-16 animate-fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link href={`/destinations/${pkg.destinationId}`} className="text-accent mb-6 inline-block">
         ← Back to {pkg.destination.name}
       </Link>

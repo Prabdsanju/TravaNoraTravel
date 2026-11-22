@@ -1,7 +1,13 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Top Holiday Destinations in Asia | TravaNora Travel',
+  description: 'Explore the best travel destinations including Thailand, Singapore, Malaysia, and Vietnam with TravaNora Travel PVT LTD.',
+};
 
 export default async function DestinationsPage() {
   const destinations = await prisma.destination.findMany({
