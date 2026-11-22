@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/admin/*'],
       },
     ],
-    sitemap: 'https://travanoratravel.com/sitemap.xml',
+    sitemap: 'https://www.travanoratravel.com/sitemap.xml',
   };
 }

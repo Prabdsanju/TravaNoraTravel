@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      url: `https://travanoratravel.com/destinations/${destination.id}`,
+      url: `https://www.travanoratravel.com/destinations/${destination.id}`,
       images: destination.imageUrl ? [{ url: destination.imageUrl, width: 1200, height: 630, alt: `${destination.name} Tour Packages from Sri Lanka` }] : undefined,
     },
     twitter: {
@@ -69,13 +69,13 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
         "price": p.price,
         "priceCurrency": "LKR",
         "availability": "https://schema.org/InStock",
-        "url": `https://travanoratravel.com/packages/${p.id}`
+        "url": `https://www.travanoratravel.com/packages/${p.id}`
       }
     })),
     "provider": {
       "@type": "TravelAgency",
       "name": "TravaNora Travel PVT LTD",
-      "url": "https://travanoratravel.com"
+      "url": "https://www.travanoratravel.com"
     }
   };
 

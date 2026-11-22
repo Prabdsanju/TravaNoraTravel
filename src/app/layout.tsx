@@ -3,7 +3,7 @@ import "./globals.css";
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://travanoratravel.com'),
+  metadataBase: new URL('https://www.travanoratravel.com'),
   title: "TravaNora Travel PVT LTD | Premier Travel Agency in Sri Lanka",
   description: "Experience unforgettable journeys to Thailand, Singapore, Malaysia, and Vietnam with TravaNora Travel. Expertly crafted tour packages, seamless air ticketing, and hassle-free visa assistance.",
   keywords: "thailand tour package from sri lanka, singapore tour packages from sri lanka, malaysia holiday packages from sri lanka, vietnam tour packages from sri lanka, dubai tour packages from sri lanka, india tour packages from sri lanka, travel agency sri lanka, cheap air tickets sri lanka, travanora travel",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "TravaNora Travel PVT LTD | Explore Asia with Ease",
     description: "Your trusted partner for curated holiday packages and seamless travel services in Asia.",
-    url: "https://travanoratravel.com",
+    url: "https://www.travanoratravel.com",
     siteName: "TravaNora Travel",
     images: [
       {
@@ -59,9 +59,9 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "TravelAgency",
               "name": "TravaNora Travel PVT LTD",
-              "url": "https://travanoratravel.com",
-              "logo": "https://travanoratravel.com/logo-circle.svg",
-              "image": "https://travanoratravel.com/og-image.jpg",
+              "url": "https://www.travanoratravel.com",
+              "logo": "https://www.travanoratravel.com/logo-circle.svg",
+              "image": "https://www.travanoratravel.com/og-image.jpg",
               "description": "Premier Travel Agency in Sri Lanka offering curated tours to Thailand, Singapore, Malaysia, and Vietnam, along with air ticketing and visa assistance.",
               "address": {
                 "@type": "PostalAddress",

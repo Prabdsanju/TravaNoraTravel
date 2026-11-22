@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      url: `https://travanoratravel.com/packages/${pkg.id}`,
+      url: `https://www.travanoratravel.com/packages/${pkg.id}`,
       images: pkg.imageUrl ? [{ url: pkg.imageUrl, width: 1200, height: 630, alt: pkg.title }] : undefined,
     },
     twitter: {
@@ -75,7 +75,7 @@ export default async function PackageDetail({ params }: { params: Promise<{ id: 
       "price": pkg.price,
       "priceCurrency": "LKR",
       "availability": "https://schema.org/InStock",
-      "url": `https://travanoratravel.com/packages/${pkg.id}`
+      "url": `https://www.travanoratravel.com/packages/${pkg.id}`
     },
     "itinerary": {
       "@type": "ItemList",
@@ -91,7 +91,7 @@ export default async function PackageDetail({ params }: { params: Promise<{ id: 
     "provider": {
       "@type": "TravelAgency",
       "name": "TravaNora Travel PVT LTD",
-      "url": "https://travanoratravel.com"
+      "url": "https://www.travanoratravel.com"
     }
   };
 
